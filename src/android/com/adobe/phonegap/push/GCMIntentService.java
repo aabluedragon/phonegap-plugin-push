@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import com.plugin.essence.wernative.WeRNativePlugin;
+
 @SuppressLint("NewApi")
 public class GCMIntentService extends GCMBaseIntentService implements PushConstants {
 
@@ -87,7 +89,12 @@ public class GCMIntentService extends GCMBaseIntentService implements PushConsta
         // Extract the payload from the message
         Bundle extras = intent.getExtras();
         if (extras != null) {
-
+            
+            if (!WeRNativePlugin.isLoggedIn() || !WeRNativePlugin.isSettingsEnablePushNotifications()) {
+                // ignore
+                return;
+            }
+            
             SharedPreferences prefs = context.getSharedPreferences(PushPlugin.COM_ADOBE_PHONEGAP_PUSH, Context.MODE_PRIVATE);
             boolean forceShow = prefs.getBoolean(FORCE_SHOW, false);
 
